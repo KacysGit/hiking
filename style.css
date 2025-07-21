@@ -10,11 +10,6 @@ body {
   width: 100%;
   height: auto;
 }
-.hero img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
 .intro-text {
   padding: 1rem;
   background: #fff;
@@ -65,6 +60,30 @@ body {
   width: 65%;
   height: 100%;
 }
+
+/* hero dynamic adjustments */
+/* Default for all devices */
+.hero img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* On larger screens: limit hero height */
+@media screen and (min-width: 768px) {
+  .hero {
+    max-height: 400px;
+    overflow: hidden;
+  }
+
+  .hero img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
 
 /* footer related*/
 html, body {
