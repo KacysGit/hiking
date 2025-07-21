@@ -10,6 +10,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+let map; // global so we can destroy/reuse it
+
 async function searchTrails() {
   const zip = document.getElementById("zipcode").value;
   const radius = parseFloat(document.getElementById("radius").value);
@@ -35,9 +37,14 @@ async function searchTrails() {
   const userLat = parseFloat(data.places[0].latitude);
   const userLng = parseFloat(data.places[0].longitude);
 
-  const map = L.map("map").setView([userLat, userLng], 10);
+  if (map) {
+    map.remove(); // completely remove old map
+    document.getElementById("map").innerHTML = ""; // clear the div
+  }
+  map = L.map("map").setView([userLat, userLng], 10);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
   L.marker([userLat, userLng]).addTo(map).bindPopup("You are here").openPopup();
+
 
   resultsDiv.innerHTML = "";
   let count = 0;
