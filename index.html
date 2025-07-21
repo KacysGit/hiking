@@ -23,24 +23,29 @@
     </header>
 
     <section class="search">
-      <div class="search-field">
-        <label for="zipcode">Your ZIP Code</label><br />
-        <input type="text" id="zipcode" placeholder="e.g. 90210" />
-      </div>
+      <form class="search-form" onsubmit="searchTrails(); return false;">
+        <div class="search-field">
+          <label for="zipcode">Your ZIP Code</label>
+          <input type="text" id="zipcode" placeholder="e.g. 90210" />
+        </div>
 
-      <div class="search-field">
-        <label for="radius">Search Radius</label><br />
-        <select id="radius">
-          <option value="5">5 miles</option>
-          <option value="10">10 miles</option>
-          <option value="25" selected>25 miles</option>
-          <option value="50">50 miles</option>
-          <option value="100">100 miles</option>
-        </select>
-      </div>
+        <div class="search-field">
+          <label for="radius">Search Radius</label>
+          <select id="radius">
+            <option value="5">5 miles</option>
+            <option value="10">10 miles</option>
+            <option value="25" selected>25 miles</option>
+            <option value="50">50 miles</option>
+            <option value="100">100 miles</option>
+          </select>
+        </div>
 
-      <button onclick="searchTrails()">Search</button>
+        <div class="search-button">
+          <button type="submit">Search</button>
+        </div>
+      </form>
     </section>
+
 
 
 
