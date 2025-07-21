@@ -16,6 +16,7 @@ async function searchTrails() {
   const zip = document.getElementById("zipcode").value;
   const radius = parseFloat(document.getElementById("radius").value);
   const resultsDiv = document.getElementById("results");
+  const placeholder = document.getElementById("search-placeholder");
 
   if (!zip) {
     alert("Please enter a ZIP code.");
@@ -38,8 +39,8 @@ async function searchTrails() {
   const userLng = parseFloat(data.places[0].longitude);
 
   if (map) {
-    map.remove(); // completely remove old map
-    document.getElementById("map").innerHTML = ""; // clear the div
+    map.remove();
+    document.getElementById("map").innerHTML = "";
   }
 
   map = L.map("map").setView([userLat, userLng], 10);
@@ -62,9 +63,16 @@ async function searchTrails() {
     .bindTooltip("You are here", { permanent: false, direction: "top", offset: [0, -25] });
 
   resultsDiv.innerHTML = "";
-  let count = 0;
+  if (placeholder) placeholder.style.display = "none";
 
-  // Store markers by trail name for linking with cards
+  document.querySelector(".results-map-container").style.display = "flex";
+
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 0);
+
+
+  let count = 0;
   const markers = {};
 
   trails.forEach((trail) => {
@@ -87,26 +95,21 @@ async function searchTrails() {
 
       const marker = L.marker([trailLat, trailLng]).addTo(map);
 
-      // Tooltip on hover (disabled on touch devices)
       if (!isTouchDevice()) {
         marker.bindTooltip(trail.name, { permanent: false, direction: "top", offset: [-15, -15] });
       }
 
-      // Clickable popup with link
       marker.bindPopup(
         `<a href="${trail.location_link}" target="_blank" rel="noopener noreferrer">${trail.name}</a>`
       );
 
       markers[trail.name] = marker;
 
-      // Add click handler on trail card to highlight marker
       item.addEventListener("click", () => {
         map.once('moveend', () => {
           marker.openPopup();
 
-          // Bounce animation
           if (marker._icon) {
-            // Prevent duplicate inner divs
             if (!marker._icon.querySelector('.bounce-inner')) {
               const wrapper = document.createElement('div');
               wrapper.className = 'bounce-inner';
@@ -117,7 +120,6 @@ async function searchTrails() {
 
             const bounceEl = marker._icon.querySelector('.bounce-inner');
             bounceEl.classList.add('bounce-marker');
-
             setTimeout(() => {
               bounceEl.classList.remove('bounce-marker');
             }, 700);
@@ -126,8 +128,6 @@ async function searchTrails() {
 
         map.panTo(marker.getLatLng());
       });
-
-
     }
   });
 
@@ -141,7 +141,7 @@ function isTouchDevice() {
 }
 
 function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 3958.8; // miles
+  const R = 3958.8;
   const rlat1 = lat1 * (Math.PI / 180);
   const rlat2 = lat2 * (Math.PI / 180);
   const difflat = rlat2 - rlat1;
