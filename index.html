@@ -11,35 +11,36 @@
   <script src="script.js" defer></script>
 </head>
 <body>
-  <header>
-    <div class="hero">
-      <img src="hero.jpg" alt="Placeholder banner" />
-      <div class="intro-text">
-        <h1>Find trails worth the climb</h1>
-        <p>Discover hidden paths, local favorites, and breathtaking views near you.</p>
+  <div class="page-wrapper">
+    <header>
+      <div class="hero">
+        <img src="hero.jpg" alt="Placeholder banner" />
+        <div class="intro-text">
+          <h1>Find trails worth the climb</h1>
+          <p>Discover hidden paths, local favorites, and breathtaking views near you.</p>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <section class="search">
-    <input type="text" id="zipcode" placeholder="Enter ZIP code" />
-    <select id="radius">
-      <option value="5">5 miles</option>
-      <option value="10">10 miles</option>
-      <option value="25" selected>25 miles</option>
-      <option value="50">50 miles</option>
-      <option value="100">100 miles</option>
-    </select>
-    <button onclick="searchTrails()">Search</button>
-  </section>
+    <section class="search">
+      <input type="text" id="zipcode" placeholder="Enter ZIP code" />
+      <select id="radius">
+        <option value="5">5 miles</option>
+        <option value="10">10 miles</option>
+        <option value="25" selected>25 miles</option>
+        <option value="50">50 miles</option>
+        <option value="100">100 miles</option>
+      </select>
+      <button onclick="searchTrails()">Search</button>
+    </section>
 
-  <!-- The horizontal container with map + listings -->
-  <section class="results-map-container">
-    <div id="results"></div>
-    <div id="map"></div>
-  </section>
+    <!-- The horizontal container with map + listings -->
+    <section class="results-map-container">
+      <div id="results"></div>
+      <div id="map"></div>
+    </section>
 
-  <div id="footer-container"></div>
-
+    <div id="footer-container"></div>
+  </div>
 </body>
 </html>

@@ -66,15 +66,32 @@ body {
   height: 100%;
 }
 
-/* footer */
-footer {
-  background: #2e7d32; /* forest green */
-  color: white;
-  text-align: center;
-  padding: 1rem;
-  margin-top: 2rem;
-  font-size: 0.9rem;
+/* footer related*/
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
+
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#footer-container {
+  display: none; /* hidden by default */
+}
+
+footer {
+  background: #e6f2e6;
+  padding: 1rem;
+  text-align: center;
+  color: #333;
+  font-size: 0.9rem;
+  margin-top: auto; /* pushes footer to bottom if content is short */
+}
+
 
 .footer-content {
   max-width: 960px;
