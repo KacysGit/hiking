@@ -40,36 +40,43 @@ async function searchTrails() {
   L.marker([userLat, userLng]).addTo(map).bindPopup("You are here").openPopup();
 
   resultsDiv.innerHTML = "";
+  let count = 0;
 
   trails.forEach((trail) => {
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(trail.address)}`)
-      .then(resp => resp.json())
-      .then(geo => {
-        if (geo && geo[0]) {
-          const trailLat = parseFloat(geo[0].lat);
-          const trailLng = parseFloat(geo[0].lon);
+    const match = trail.location_link.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (!match) return;
 
-          const dist = getDistance(userLat, userLng, trailLat, trailLng);
-          if (dist <= radius) {
-            const item = document.createElement("div");
-            item.className = "result-item";
-            item.innerHTML = `<strong>${trail.name}</strong><br>${trail.address}<br><a href="${trail.mapLink}" target="_blank">Directions</a>`;
-            resultsDiv.appendChild(item);
+    const trailLat = parseFloat(match[1]);
+    const trailLng = parseFloat(match[2]);
 
-            L.marker([trailLat, trailLng]).addTo(map).bindPopup(`${trail.name}`);
-          }
-        }
-      });
+    const dist = getDistance(userLat, userLng, trailLat, trailLng);
+    if (dist <= radius) {
+      count++;
+      const item = document.createElement("div");
+      item.className = "result-item";
+      item.innerHTML = `
+        <strong>${trail.name}</strong><br>
+        ${trail.full_address}<br>
+        <a href="${trail.location_link}" target="_blank">Directions</a>`;
+      resultsDiv.appendChild(item);
+
+      L.marker([trailLat, trailLng]).addTo(map).bindPopup(`${trail.name}`);
+    }
   });
+
+  if (count === 0) {
+    resultsDiv.innerHTML = "<p>No trails found in this radius.</p>";
+  }
 }
 
-// Haversine formula
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 3958.8; // miles
   const rlat1 = lat1 * (Math.PI / 180);
   const rlat2 = lat2 * (Math.PI / 180);
   const difflat = rlat2 - rlat1;
   const difflon = (lon2 - lon1) * (Math.PI / 180);
-  const a = Math.sin(difflat / 2) ** 2 + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) ** 2;
+  const a = Math.sin(difflat / 2) ** 2 +
+            Math.cos(rlat1) * Math.cos(rlat2) *
+            Math.sin(difflon / 2) ** 2;
   return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 }
