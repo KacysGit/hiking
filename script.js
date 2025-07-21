@@ -41,10 +41,25 @@ async function searchTrails() {
     map.remove(); // completely remove old map
     document.getElementById("map").innerHTML = ""; // clear the div
   }
+
   map = L.map("map").setView([userLat, userLng], 10);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
-  L.marker([userLat, userLng]).addTo(map).bindPopup("You are here").openPopup();
 
+  const redIcon = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [0, -30],
+    tooltipAnchor: [12, -20],
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+    shadowSize: [41, 41],
+    shadowAnchor: [12, 41]
+  });
+
+  const userMarker = L.marker([userLat, userLng], { icon: redIcon })
+    .addTo(map)
+    .bindPopup("You are here")
+    .bindTooltip("You are here", { permanent: false, direction: "top" });
 
   resultsDiv.innerHTML = "";
   let count = 0;
@@ -76,7 +91,6 @@ async function searchTrails() {
       marker.bindPopup(
         `<a href="${trail.location_link}" target="_blank" rel="noopener noreferrer">${trail.name}</a>`
       );
-
     }
   });
 
@@ -96,17 +110,3 @@ function getDistance(lat1, lon1, lat2, lon2) {
             Math.sin(difflon / 2) ** 2;
   return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 }
-
-// Load footer from /includes/footer.html
-window.addEventListener("DOMContentLoaded", async () => {
-  const footerContainer = document.getElementById("footer-container");
-  if (!footerContainer) return;
-
-  try {
-    const footerRes = await fetch("includes/footer.html");
-    const footerHtml = await footerRes.text();
-    footerContainer.innerHTML = footerHtml;
-  } catch (err) {
-    console.error("Failed to load footer:", err);
-  }
-});
