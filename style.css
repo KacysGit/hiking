@@ -71,7 +71,7 @@ body {
 }
 
 /* On larger screens: limit hero height */
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 500px) {
   .hero {
     max-height: 400px;
     overflow: hidden;
