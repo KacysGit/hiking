@@ -13,30 +13,67 @@ window.addEventListener("DOMContentLoaded", async () => {
 let map; // global so we can destroy/reuse it
 
 async function searchTrails() {
-  const zip = document.getElementById("zipcode").value;
+  const locationInput = document.getElementById("location").value.trim();
   const radius = parseFloat(document.getElementById("radius").value);
   const resultsDiv = document.getElementById("results");
   const placeholder = document.getElementById("search-placeholder");
 
-  if (!zip) {
-    alert("Please enter a ZIP code.");
+  if (!locationInput) {
+    alert("Please enter a ZIP code or address.");
     return;
   }
+
+  let userLat, userLng;
+
+  if (/^\d{5}$/.test(locationInput)) {
+    // ZIP code
+    const res = await fetch(`https://api.zippopotam.us/us/${locationInput}`);
+    if (!res.ok) {
+      alert("Invalid ZIP code.");
+      return;
+    }
+    const data = await res.json();
+    userLat = parseFloat(data.places[0].latitude);
+    userLng = parseFloat(data.places[0].longitude);
+  } else {
+    // Address or city/state
+    const encoded = encodeURIComponent(locationInput);
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encoded}&format=json`);
+    const data = await res.json();
+
+    if (!data.length && locationInput.includes(',')) {
+      // Fallback: try just city/state part
+      const cityOnly = locationInput.split(',').slice(1).join(',').trim();
+      if (cityOnly) {
+        const fallbackRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cityOnly)}&format=json`);
+        const fallbackData = await fallbackRes.json();
+
+        if (!fallbackData.length) {
+          alert("Location not found.");
+          return;
+        }
+
+        userLat = parseFloat(fallbackData[0].lat);
+        userLng = parseFloat(fallbackData[0].lon);
+      } else {
+        alert("Location not found.");
+        return;
+      }
+    } else if (!data.length) {
+      alert("Location not found.");
+      return;
+    } else {
+      userLat = parseFloat(data[0].lat);
+      userLng = parseFloat(data[0].lon);
+    }
+  }
+
+
 
   if (!trails.length) {
     alert("Trail data is still loading. Please try again in a moment.");
     return;
   }
-
-  const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
-  if (!res.ok) {
-    alert("Invalid ZIP code");
-    return;
-  }
-
-  const data = await res.json();
-  const userLat = parseFloat(data.places[0].latitude);
-  const userLng = parseFloat(data.places[0].longitude);
 
   if (map) {
     map.remove();
@@ -66,11 +103,7 @@ async function searchTrails() {
   if (placeholder) placeholder.style.display = "none";
 
   document.querySelector(".results-map-container").style.display = "flex";
-
-  setTimeout(() => {
-    map.invalidateSize();
-  }, 0);
-
+  setTimeout(() => map.invalidateSize(), 0);
 
   let count = 0;
   const markers = {};
@@ -137,7 +170,6 @@ async function searchTrails() {
       <p>No trails found in this radius.</p>
       <div class="exclamation">!</div>
     </div>`;
-
   }
 }
 
