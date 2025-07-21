@@ -3,59 +3,113 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Find trails worth the climb — discover hidden paths, local favorites, and breathtaking views near you." />
-  <title>Hiking Trails Near Me</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="Explore hiking trails near your location by ZIP code or address. Get directions, trail info, and discover nature close to home or your vacation spot.">
+  <meta name="keywords" content="hiking trails near me, trails near me, hiking near me, where to go hiking, trail finder, local hikes, outdoor map, hiking directory, trail map, trails by zip code, trail search">
+  <meta name="robots" content="index, follow">
+
+  <title>Find Hiking Trails Near You | Hiking Directory Map</title>
+
+  <!-- Preload hero image to speed up LCP -->
+  <link rel="preload" as="image" href="hero.jpg">
+
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="script.js" defer></script>
+
+  <!-- Schema Markup for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Hiking Near Me",
+    "url": "https://yourdomain.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://yourdomain.com/?query={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
 </head>
 <body>
   <div class="page-wrapper">
     <header>
       <div class="hero">
-        <div class="hero-picture" alt="Placeholder banner"></div>
+        <div class="hero-picture" alt="Scenic hiking trail through forest"></div>
         <div class="intro-text">
           <h1>Find trails worth the climb</h1>
-          <p>Discover hidden paths, local favorites, and breathtaking views near you.</p>
+          <p>
+            Discover hidden paths, local favorites, and breathtaking views near you.<br>
+            <a href="#search" class="visually-hidden">Jump to trail search</a>
+          </p>
         </div>
       </div>
     </header>
 
-    <section class="search">
-      <form class="search-form" onsubmit="searchTrails(); return false;">
-        <div class="search-field">
-          <label for="location">ZIP Code or Address</label>
-          <input type="text" id="location" placeholder="e.g. 90210 or Denver, CO" />
-        </div>
+    <main>
+      <section id="search" class="search">
+        <form class="search-form" onsubmit="searchTrails(); return false;">
+          <div class="search-field">
+            <label for="location">ZIP Code or Address</label>
+            <input type="text" id="location" placeholder="e.g. 90210 or Denver, CO" />
+          </div>
 
-        <div class="search-field">
-          <label for="radius">Search Radius</label>
-          <select id="radius">
-            <option value="5">5 miles</option>
-            <option value="10">10 miles</option>
-            <option value="25" selected>25 miles</option>
-            <option value="50">50 miles</option>
-            <option value="100">100 miles</option>
-          </select>
-        </div>
+          <div class="search-field">
+            <label for="radius">Search Radius</label>
+            <select id="radius">
+              <option value="5">5 miles</option>
+              <option value="10">10 miles</option>
+              <option value="25" selected>25 miles</option>
+              <option value="50">50 miles</option>
+              <option value="100">100 miles</option>
+            </select>
+          </div>
 
-        <div class="search-button">
-          <button type="submit">Search</button>
-        </div>
-      </form>
+          <div class="search-button">
+            <button type="submit">Search</button>
+          </div>
+        </form>
+      </section>
+
+      <div id="search-placeholder" style="text-align: center; padding: 2rem; color: #666;">
+        <p>Enter your ZIP code or address to find nearby hiking trails!</p>
+      </div>
+
+      <!-- Horizontal container with map + listings -->
+      <section class="results-map-container">
+        <div id="results"></div>
+        <div id="map"></div>
+      </section>
+
+      <!-- Hidden index of trails for crawlers -->
+      <section id="trail-index" style="display: none;">
+        <h2>Popular Trail Locations</h2>
+        <ul>
+          <li>Appalachian Trail, GA</li>
+          <li>Zion Canyon Overlook, UT</li>
+          <li>Echo Mountain Trail, CA</li>
+          <li>Mount Tamalpais, CA</li>
+          <li>Blue Hills Reservation, MA</li>
+          <li>Red River Gorge, KY</li>
+          <li>Mohonk Preserve, NY</li>
+        </ul>
+      </section>
+    </main>
+
+    <section class="seo-content visually-hidden">
+      <div class="footer-description" >
+        <h2>Explore Hiking Trails Near You</h2>
+        <p>
+          Looking for hiking trails near your ZIP code, city, or state? Our trail finder makes it easy to locate top-rated hiking spots close to home. Whether you're in the mountains, countryside, or suburbs, we help you discover local trails for every skill level. From peaceful nature walks to adventurous climbs, start your journey outdoors today.
+        </p>
+        <p>
+          Simply enter your ZIP code or address to see nearby trails with directions, distances, and helpful links. Whether you're hiking in California, Pennsylvania, Texas, or anywhere in between — we've got your next adventure mapped.
+        </p>
+      </div>
     </section>
 
-
-    <div id="search-placeholder" style="text-align: center; padding: 2rem; color: #666;">
-      <p>Enter your ZIP code to find nearby hiking trails!</p>
-    </div>
-
-    <!-- The horizontal container with map + listings -->
-    <section class="results-map-container">
-      <div id="results"></div>
-      <div id="map"></div>
-    </section>
 
     <footer>
       <div class="footer-content">
