@@ -1,4 +1,6 @@
 let trails = [];
+let map; // global Leaflet map
+let currentMarkers = []; // track all current map markers
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
@@ -10,8 +12,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-let map; // global so we can destroy/reuse it
-
 async function searchTrails() {
   const locationInput = document.getElementById("location").value.trim();
   const radius = parseFloat(document.getElementById("radius").value);
@@ -22,6 +22,8 @@ async function searchTrails() {
     alert("Please enter a ZIP code or address.");
     return;
   }
+
+  resultsDiv.innerHTML = `<p style="text-align:center; padding: 1rem;">Loading trails...</p>`;
 
   let userLat, userLng;
 
@@ -42,17 +44,14 @@ async function searchTrails() {
     const data = await res.json();
 
     if (!data.length && locationInput.includes(',')) {
-      // Fallback: try just city/state part
       const cityOnly = locationInput.split(',').slice(1).join(',').trim();
       if (cityOnly) {
         const fallbackRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cityOnly)}&format=json`);
         const fallbackData = await fallbackRes.json();
-
         if (!fallbackData.length) {
           alert("Location not found.");
           return;
         }
-
         userLat = parseFloat(fallbackData[0].lat);
         userLng = parseFloat(fallbackData[0].lon);
       } else {
@@ -68,20 +67,22 @@ async function searchTrails() {
     }
   }
 
-
-
   if (!trails.length) {
     alert("Trail data is still loading. Please try again in a moment.");
     return;
   }
 
-  if (map) {
-    map.remove();
-    document.getElementById("map").innerHTML = "";
+  // Reuse map instead of recreating
+  if (!map) {
+    map = L.map("map").setView([userLat, userLng], 10);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+  } else {
+    map.setView([userLat, userLng], 10);
   }
 
-  map = L.map("map").setView([userLat, userLng], 10);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+  // Clear previous markers
+  currentMarkers.forEach(m => map.removeLayer(m));
+  currentMarkers = [];
 
   const redIcon = L.icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
@@ -98,6 +99,7 @@ async function searchTrails() {
     .addTo(map)
     .bindPopup("You are here")
     .bindTooltip("You are here", { permanent: false, direction: "top", offset: [0, -25] });
+  currentMarkers.push(userMarker);
 
   resultsDiv.innerHTML = "";
   if (placeholder) placeholder.style.display = "none";
@@ -127,6 +129,7 @@ async function searchTrails() {
       resultsDiv.appendChild(item);
 
       const marker = L.marker([trailLat, trailLng]).addTo(map);
+      currentMarkers.push(marker);
 
       if (!isTouchDevice()) {
         marker.bindTooltip(trail.name, { permanent: false, direction: "top", offset: [-15, -15] });
