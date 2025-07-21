@@ -67,9 +67,15 @@ async function searchTrails() {
         <a href="${trail.location_link}" target="_blank">Directions</a>`;
       resultsDiv.appendChild(item);
 
-      L.marker([trailLat, trailLng]).addTo(map).bindPopup(
-      `<a href="${trail.location_link}" target="_blank" rel="noopener noreferrer">${trail.name}</a>`
-);
+      const marker = L.marker([trailLat, trailLng]).addTo(map);
+
+      // Tooltip on hover
+      marker.bindTooltip(trail.name, { permanent: false, direction: "top" });
+
+      // Clickable popup with link
+      marker.bindPopup(
+        `<a href="${trail.location_link}" target="_blank" rel="noopener noreferrer">${trail.name}</a>`
+      );
 
     }
   });
