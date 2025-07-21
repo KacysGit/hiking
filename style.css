@@ -81,10 +81,9 @@ body {
     height: 100%;
     width: 100%;
     object-fit: cover;
-    object-position: center center; /* Focus on middle */
+    object-position: center 30%; /* Focus on middle */
   }
 }
-
 
 /* footer related*/
 html, body {
