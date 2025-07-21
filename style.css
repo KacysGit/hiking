@@ -103,7 +103,15 @@ body {
   padding: 1rem;
   margin-bottom: 1rem;
   border-left: 4px solid #4CAF50;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
+
+.result-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
 
 .results-map-container {
   display: flex;
@@ -180,3 +188,15 @@ footer {
     width: 100%;
   }
 }
+
+/* CSS to support bouncing only the visual part of the marker */
+.leaflet-marker-icon .bounce-inner {
+  display: inline-block;
+  animation: bounce 0.7s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+

@@ -64,6 +64,9 @@ async function searchTrails() {
   resultsDiv.innerHTML = "";
   let count = 0;
 
+  // Store markers by trail name for linking with cards
+  const markers = {};
+
   trails.forEach((trail) => {
     const match = trail.location_link.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
     if (!match) return;
@@ -93,6 +96,38 @@ async function searchTrails() {
       marker.bindPopup(
         `<a href="${trail.location_link}" target="_blank" rel="noopener noreferrer">${trail.name}</a>`
       );
+
+      markers[trail.name] = marker;
+
+      // Add click handler on trail card to highlight marker
+      item.addEventListener("click", () => {
+        map.once('moveend', () => {
+          marker.openPopup();
+
+          // Bounce animation
+          if (marker._icon) {
+            // Prevent duplicate inner divs
+            if (!marker._icon.querySelector('.bounce-inner')) {
+              const wrapper = document.createElement('div');
+              wrapper.className = 'bounce-inner';
+              wrapper.innerHTML = marker._icon.innerHTML;
+              marker._icon.innerHTML = '';
+              marker._icon.appendChild(wrapper);
+            }
+
+            const bounceEl = marker._icon.querySelector('.bounce-inner');
+            bounceEl.classList.add('bounce-marker');
+
+            setTimeout(() => {
+              bounceEl.classList.remove('bounce-marker');
+            }, 700);
+          }
+        });
+
+        map.panTo(marker.getLatLng());
+      });
+
+
     }
   });
 
