@@ -52,6 +52,19 @@ body {
   margin: 0.5rem;
 }
 
+.search-field {
+  display: inline-block;
+  margin: 0.5rem;
+  text-align: left;
+}
+
+.search-field label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+
 #map {
   height: 400px;
   margin: 1rem;
