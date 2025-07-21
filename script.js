@@ -132,7 +132,12 @@ async function searchTrails() {
   });
 
   if (count === 0) {
-    resultsDiv.innerHTML = "<p>No trails found in this radius.</p>";
+    resultsDiv.innerHTML = `
+    <div class="no-results">
+      <p>No trails found in this radius.</p>
+      <div class="exclamation">!</div>
+    </div>`;
+
   }
 }
 
