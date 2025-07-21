@@ -59,7 +59,7 @@ async function searchTrails() {
   const userMarker = L.marker([userLat, userLng], { icon: redIcon })
     .addTo(map)
     .bindPopup("You are here")
-    .bindTooltip("You are here", { permanent: false, direction: "top" });
+    .bindTooltip("You are here", { permanent: false, direction: "top", offset: [0, -25] });
 
   resultsDiv.innerHTML = "";
   let count = 0;
@@ -84,11 +84,10 @@ async function searchTrails() {
 
       const marker = L.marker([trailLat, trailLng]).addTo(map);
 
-      // Tooltip on hover
+      // Tooltip on hover (disabled on touch devices)
       if (!isTouchDevice()) {
-        marker.bindTooltip(trail.name, { permanent: false, direction: "top" });
+        marker.bindTooltip(trail.name, { permanent: false, direction: "top", offset: [-15, -15] });
       }
-
 
       // Clickable popup with link
       marker.bindPopup(
@@ -105,7 +104,6 @@ async function searchTrails() {
 function isTouchDevice() {
   return window.matchMedia("(hover: none)").matches;
 }
-
 
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 3958.8; // miles
