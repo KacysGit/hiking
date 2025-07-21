@@ -110,29 +110,3 @@ window.addEventListener("DOMContentLoaded", async () => {
     console.error("Failed to load footer:", err);
   }
 });
-
-window.addEventListener("DOMContentLoaded", async () => {
-  const footerContainer = document.getElementById("footer-container");
-  if (!footerContainer) return;
-
-  try {
-    const footerRes = await fetch("includes/footer.html");
-    const footerHtml = await footerRes.text();
-    footerContainer.innerHTML = footerHtml;
-
-    // Only show footer when user reaches bottom of page
-    window.addEventListener("scroll", () => {
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const docHeight = document.documentElement.scrollHeight;
-
-      if (scrollY + windowHeight >= docHeight - 5) {
-        footerContainer.style.display = "block";
-      } else {
-        footerContainer.style.display = "none";
-      }
-    });
-  } catch (err) {
-    console.error("Failed to load footer:", err);
-  }
-});
