@@ -85,7 +85,10 @@ async function searchTrails() {
       const marker = L.marker([trailLat, trailLng]).addTo(map);
 
       // Tooltip on hover
-      marker.bindTooltip(trail.name, { permanent: false, direction: "top" });
+      if (!isTouchDevice()) {
+        marker.bindTooltip(trail.name, { permanent: false, direction: "top" });
+      }
+
 
       // Clickable popup with link
       marker.bindPopup(
@@ -98,6 +101,11 @@ async function searchTrails() {
     resultsDiv.innerHTML = "<p>No trails found in this radius.</p>";
   }
 }
+
+function isTouchDevice() {
+  return window.matchMedia("(hover: none)").matches;
+}
+
 
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 3958.8; // miles
