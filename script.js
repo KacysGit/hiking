@@ -96,3 +96,17 @@ function getDistance(lat1, lon1, lat2, lon2) {
             Math.sin(difflon / 2) ** 2;
   return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 }
+
+// Load footer from /includes/footer.html
+window.addEventListener("DOMContentLoaded", async () => {
+  const footerContainer = document.createElement("div");
+  document.body.appendChild(footerContainer);
+
+  try {
+    const footerRes = await fetch("includes/footer.html");
+    const footerHtml = await footerRes.text();
+    footerContainer.innerHTML = footerHtml;
+  } catch (err) {
+    console.error("Failed to load footer:", err);
+  }
+});
