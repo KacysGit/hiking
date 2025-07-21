@@ -67,7 +67,10 @@ async function searchTrails() {
         <a href="${trail.location_link}" target="_blank">Directions</a>`;
       resultsDiv.appendChild(item);
 
-      L.marker([trailLat, trailLng]).addTo(map).bindPopup(`${trail.name}`);
+      L.marker([trailLat, trailLng]).addTo(map).bindPopup(
+      `<a href="${trail.location_link}" target="_blank" rel="noopener noreferrer">${trail.name}</a>`
+);
+
     }
   });
 
