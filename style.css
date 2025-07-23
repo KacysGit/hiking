@@ -20,7 +20,7 @@ body {
 .hero-picture {
   width: 100%;
   height: 250px; /* Default height for mobile */
-  background-image: url('hero.jpg');
+  background-image: url('hero.avif');
   background-size: cover;
   background-position: center 50%; /* Focus on horizon (middle) */
   background-repeat: no-repeat;
