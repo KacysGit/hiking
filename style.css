@@ -1,5 +1,6 @@
 /* style.css */
 
+/* 
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -11,26 +12,26 @@ body {
 .hero {
   position: relative;
   width: 100%;
-  height: auto;
   display: flex;
   flex-direction: column;
 }
 
-/* NEW: styles for the background image */
 .hero-picture {
   width: 100%;
-  height: 250px; /* Default height for mobile */
-  background-image: url('hero.avif');
+  height: 250px;
+  background-image: url('hero.jpg');
+  background-image: image-set(
+    url('hero.avif') type("image/avif"),
+    url('hero.jpg') type("image/jpeg")
+  );
   background-size: cover;
-  background-position: center 50%; /* Focus on horizon (middle) */
+  background-position: center 50%;
   background-repeat: no-repeat;
 }
 
-/* Adjust image height and crop focus for larger screens */
 @media screen and (min-width: 500px) {
   .hero-picture {
     height: 400px;
-    background-position: center 50%; /* Adjust to 45% or 55% if needed */
   }
 }
 
@@ -57,8 +58,8 @@ body {
 .search-field {
   display: flex;
   flex-direction: column;
-  text-align: left;
   min-width: 160px;
+  text-align: left;
 }
 
 .search-field label {
@@ -75,7 +76,7 @@ body {
 
 .search-button button {
   padding: 0.6rem 1rem;
-  margin-top: 1.4rem; /* aligns with bottom of inputs */
+  margin-top: 1.4rem;
   cursor: pointer;
   background-color: #4CAF50;
   color: white;
@@ -87,7 +88,24 @@ body {
   background-color: #45a049;
 }
 
+@media (max-width: 600px) {
+  .search-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
+  .search-button {
+    margin-top: 0;
+  }
+
+  .search-button button {
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+}
+*/
+
+/* Remaining CSS (not inlined) stays active */
 
 #map {
   height: 400px;
@@ -111,7 +129,6 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
 }
-
 
 .results-map-container {
   display: none; /* hidden until search */
@@ -173,22 +190,6 @@ footer {
   margin: 0 auto;
 }
 
-@media (max-width: 600px) {
-  .search-form {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .search-button {
-    margin-top: 0;
-  }
-
-  .search-button button {
-    margin-top: 0.5rem;
-    width: 100%;
-  }
-}
-
 /* CSS to support bouncing only the visual part of the marker */
 .leaflet-marker-icon .bounce-inner {
   display: inline-block;
@@ -226,17 +227,6 @@ footer {
   0%   { transform: scale(1); opacity: 0.7; }
   50%  { transform: scale(1.2); opacity: 1; }
   100% { transform: scale(1); opacity: 0.7; }
-}
-
-@media (max-width: 600px) {
-  .search-form {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .search-button button {
-    width: 100%;
-  }
 }
 
 .visually-hidden {
